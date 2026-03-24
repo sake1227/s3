@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@vmian
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -23,7 +23,7 @@ jobs:
 
       - name: Test S3 connection with boto3
         env:
-          S3_ENDPOINT: https://s3.xxrom.cn
+          S3_ENDPOINT: http://s3.xxrom.cn
           S3_BUCKET: "boot"   # 如果存为 Secret，否则改为直接写死或使用变量
           AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
