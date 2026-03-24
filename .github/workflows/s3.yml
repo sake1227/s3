@@ -23,7 +23,7 @@ jobs:
 
       - name: Test S3 connection with boto3
         env:
-          S3_ENDPOINT: http://s3.xxrom.cn:5246
+          S3_ENDPOINT: https://s3.xxrom.cn
           S3_BUCKET: "boot"   # 如果存为 Secret，否则改为直接写死或使用变量
           AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
