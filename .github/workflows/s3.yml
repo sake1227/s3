@@ -27,6 +27,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-east-1   # 自定义 endpoint 时 region 可任意
         run: |
-          aws s3 cp empty.txt s3://YOUR_BUCKET_NAME/empty.txt \
+          aws s3 cp empty.txt s3://boot/empty.txt \
             --endpoint-url http://s3.xxrom.cn:5246 \
             --acl private
