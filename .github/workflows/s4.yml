@@ -87,7 +87,7 @@ jobs:
               print(f"⚠️ List objects failed (maybe no read permission): {e}")
 
           # 测试 3: 上传文件（新增）
-          file_path = '/home/runner/work/boot/boot/获取解压密码.txt'
+          file_path = '/home/runner/work/s3/s3/1.zip'
           if os.path.exists(file_path):
               try:
                   # 使用文件名作为对象键
