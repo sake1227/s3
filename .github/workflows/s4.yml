@@ -32,6 +32,8 @@ jobs:
           python - <<EOF
           import boto3
           from botocore.exceptions import ClientError
+          from botocore.config import Config
+          from boto3.s3.transfer import TransferConfig
           import os
           import sys
 
@@ -41,13 +43,18 @@ jobs:
           secret_key = os.environ['AWS_SECRET_ACCESS_KEY']
           region = os.environ.get('AWS_DEFAULT_REGION', 'us-east-1')
 
-          # 创建 S3 客户端
+          # 创建 S3 客户端，增加超时和重试配置
           s3 = boto3.client(
               's3',
               endpoint_url=endpoint,
               aws_access_key_id=access_key,
               aws_secret_access_key=secret_key,
-              region_name=region
+              region_name=region,
+              config=Config(
+                  connect_timeout=60,
+                  read_timeout=60,
+                  retries={'max_attempts': 5}
+              )
           )
 
           print(f"Testing connection to S3 endpoint: {endpoint}")
@@ -80,13 +87,15 @@ jobs:
               print(f"⚠️ List objects failed (maybe no read permission): {e}")
 
           # 测试 3: 上传文件（新增）
-          file_path = '/home/runner/work/s3/s3/1.zip'
+          file_path = '/home/runner/work/boot/boot/获取解压密码.txt'
           if os.path.exists(file_path):
               try:
                   # 使用文件名作为对象键
                   object_key = os.path.basename(file_path)
+                  # 设置分片阈值高于文件大小，强制使用单次上传（避免分片上传的 NoSuchUpload 错误）
+                  config = TransferConfig(multipart_threshold=50 * 1024 * 1024)  # 50MB
                   with open(file_path, 'rb') as f:
-                      s3.upload_fileobj(f, bucket, object_key)
+                      s3.upload_fileobj(f, bucket, object_key, Config=config)
                   print(f"✅ Successfully uploaded {file_path} to bucket {bucket} as '{object_key}'")
               except ClientError as e:
                   print(f"❌ Upload failed: {e}")
